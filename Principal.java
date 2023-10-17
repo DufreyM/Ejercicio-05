@@ -15,10 +15,9 @@ public class Principal {
         Torneo uvg = new Torneo();
         Scanner teclado = new Scanner(System.in);
 
-        String opciones = "1. Agregar Jugador. \n 2. Mostrar Jugador. \n 3. Mejores Liberos. \n 4. Pasadores con 80%. \n 5. Crear y Guardar CSV. \n 6. Cargar CSV";
+        String opciones = "1. Agregar Jugador. \n 2. Mostrar Jugador. \n 3. Mejores Liberos. \n 4. Pasadores con 80%. \n 5. Salir";
         int op = 0;
         boolean continuar = true;
-
         while (continuar) {
             System.out.println(opciones);
             System.out.println("Ingrese la opción deseada: ");
@@ -41,12 +40,8 @@ public class Principal {
                  int pasadoresCount = uvg.PasadoresConAltaEfectividad();
                  System.out.println("La cantidad de pasadores con más de 80% de efectividad son: " + pasadoresCount);
                  break;
-                
+            
                 case 5:
-                    uvg.guardarDatosEnCSV();
-                case 6:
-                    uvg.cargarDatosDesdeCSV();
-                case 7:
                     continuar = false;
                     System.out.println("Gracias por usar el programa");
                     break;

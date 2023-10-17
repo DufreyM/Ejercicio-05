@@ -33,18 +33,37 @@ public class Torneo {
 
     public void agregarJugador(String nombre, String pais, int errores, int aces, int totalDeServicios, int pasador, int fintas,  int recibosEfectivos,  int ataques,
     int bloqueosEfectivos, int bloqueosFallidos, int tipoJugador){
+        String archivo = "jugadores.csv";
         switch (tipoJugador){
             case 1: 
             AuxiliarOpuesto AuxiliarOpuesto = new AuxiliarOpuesto(nombre, pais, errores, aces, totalDeServicios, ataques,
             bloqueosEfectivos, bloqueosFallidos);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo, true))){
+                writer.write(nombre + "," + pais + "," + errores + "," + aces + "," + totalDeServicios + "," + ataques + "," + bloqueosEfectivos + "," + bloqueosFallidos);
+                writer.newLine();
+            } catch (IOException e) {
+                System.out.println("Error al escribir en el archivo CSV: " + e.getMessage());
+            }
             Jugadores.add(AuxiliarOpuesto); 
-            break; 
+            break;
             case 2: 
             Libero Libero = new Libero(nombre, pais, errores, aces, totalDeServicios, recibosEfectivos); 
-            Jugadores.add(Libero);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo, true))){
+                writer.write(nombre + "," + pais + "," + errores + "," + aces + "," + totalDeServicios + "," + recibosEfectivos);
+                writer.newLine();
+            } catch (IOException e) {
+                System.out.println("Error al escribir en el archivo CSV: " + e.getMessage());
+            }
+            Jugadores.add(Libero); 
             case 3: 
             pasador pas = new pasador(nombre,pais, errores, aces, totalDeServicios, pasador, fintas); 
             Jugadores.add(pas); 
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo, true))){
+                writer.write(nombre + "," + pais + "," + errores + "," + aces + "," + totalDeServicios + "," + pasador + "," + fintas);
+                writer.newLine();
+            } catch (IOException e) {
+                System.out.println("Error al escribir en el archivo CSV: " + e.getMessage());
+            }
             case 4:
             break; 
         }
@@ -177,58 +196,5 @@ public int PasadoresConAltaEfectividad() {
         } 
     }
     return pasadoresConAltaEfectividad;
-}
-
-public void guardarDatosEnCSV() {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter("jugadores.csv", true))) {
-        for (Jugador jugador : Jugadores) {
-            String[] datosJugador = jugador.obtenerDatosCSV(); // Debe implementarse en la clase Jugador
-            String jugadorCSV = String.join(",", datosJugador);
-            writer.write(jugadorCSV);
-            writer.newLine();
-        }
-        System.out.println("Los datos se han guardado en jugadores.csv correctamente.");
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}
-
-
-public void cargarDatosDesdeCSV() {
-    try (BufferedReader reader = new BufferedReader(new FileReader("jugadores.csv"))) {
-        String linea;
-        while ((linea = reader.readLine()) != null) {
-            String[] datos = linea.split(",");
-            if (datos.length >= 11) {
-                int tipoJugador = 0; // Valor predeterminado 
-                try {
-                    if (!datos[10].equals("null")) {
-                        tipoJugador = Integer.parseInt(datos[10]);
-                    } else {
-                        // Manejo de valores nulos
-                        tipoJugador = 1; 
-                    }
-                } catch (NumberFormatException e) {
-                    
-                    tipoJugador = 0; 
-                }
-
-                Jugador jugador = null;
-                if (tipoJugador == 1) {
-                    jugador = new AuxiliarOpuesto(datos[0], datos[1], Integer.parseInt(datos[2]), Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), Integer.parseInt(datos[8]), Integer.parseInt(datos[9]), Integer.parseInt(datos[10]));
-                } else if (tipoJugador == 2) {
-                    jugador = new Libero(datos[0], datos[1], Integer.parseInt(datos[2]), Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), Integer.parseInt(datos[7]));
-                } else if (tipoJugador == 3) {
-                    jugador = new pasador(datos[0], datos[1], Integer.parseInt(datos[2]), Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), Integer.parseInt(datos[5]), Integer.parseInt(datos[6]));
-                }
-                Jugadores.add(jugador);
-            } else {
-                System.out.println("Error en el formato de datos en la línea: " + linea);
-            }
-        }
-        System.out.println("Los datos se han cargado desde jugadores.csv correctamente.");
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
 }
 }

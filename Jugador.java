@@ -67,7 +67,6 @@ public class Jugador {
         // Debes personalizar este método en las subclases para incluir sus campos específicos.
 
         String[] datos = new String[11]; // Ajusta el tamaño del arreglo según la cantidad de campos
-
         datos[0] = nombre;
         datos[1] = pais;
         datos[2] = String.valueOf(errores);
